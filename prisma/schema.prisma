@@ -53,7 +53,6 @@ model Teacher {
   venues                  Venue[]
   payments                Payment[]
   notifications           Notification[]
-  mandalaTrackers         MandalaTracker[]
   subscription            TeacherSubscription?
 
   @@map("teachers")
@@ -178,8 +177,6 @@ model Program {
   correctionSessions     Program[]     @relation("CorrectionParent")
   bookings               Booking[]
   studentPractices       StudentPractice[]
-  mandalaTrackers        MandalaTracker[]
-
   @@unique([teacherId, slug])
   @@map("programs")
 }
@@ -260,8 +257,6 @@ model Student {
   bookings              Booking[]
   healthForms           HealthForm[]
   studentPractices      StudentPractice[]
-  mandalaTrackers       MandalaTracker[]
-
   @@unique([teacherId, email])
   @@map("students")
 }
@@ -307,8 +302,6 @@ model Booking {
   healthForm            HealthForm?
   payment               Payment?
   studentPractice       StudentPractice?
-  mandalaTracker        MandalaTracker?
-
   @@map("bookings")
 }
 
@@ -399,42 +392,6 @@ model StudentPractice {
   booking       Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 
   @@map("student_practices")
-}
-
-// =============================================================================
-// MANDALA (40-DAY PRACTICE TRACKING)
-// =============================================================================
-
-model MandalaTracker {
-  id              String        @id @default(uuid()) @db.Uuid
-  studentId       String        @db.Uuid
-  bookingId       String        @unique @db.Uuid
-  programId       String        @db.Uuid
-  teacherId       String        @db.Uuid
-  practiceName    String
-  startDate       DateTime      @db.Date
-  endDate         DateTime      @db.Date
-  reminderTime    String        @default("06:00") // HH:mm format
-  daysCompleted   Int           @default(0)
-  dailyLog        Json          @default("[]") // [{ day: 1, practiced: true, date: "2026-02-01" }]
-  status          MandalaStatus @default(ACTIVE)
-
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-
-  // Relations
-  student         Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  booking         Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
-  program         Program       @relation(fields: [programId], references: [id], onDelete: Cascade)
-  teacher         Teacher       @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-
-  @@map("mandala_trackers")
-}
-
-enum MandalaStatus {
-  ACTIVE
-  COMPLETED
-  ABANDONED
 }
 
 // =============================================================================
