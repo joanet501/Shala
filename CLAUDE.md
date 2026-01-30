@@ -77,9 +77,19 @@ Teacher, ScheduleTemplate, Program, Venue, Student, Booking, HealthForm, Student
 
 Key design: all tables use `@@map("snake_case_table_names")`, fields are camelCase in code.
 
+## Project Progress
+
+```
+Overall         █████████████░░░░░░░░░░░░░░░░  43%  (12/28)
+
+Foundation      ████████████████████████████░░ 100%  (11/11) ✓
+Phase 1 — MVP   ███░░░░░░░░░░░░░░░░░░░░░░░░░  11%  ( 1/ 9)
+Future Phases   ░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0%  ( 0/ 8)
+```
+
 ## Current Status
 
-### Completed
+### Completed (Foundation)
 - [x] Product spec (`C:\desarrollo\yoga-studio-saas\PRODUCT_SPEC.md`)
 - [x] Feature review docs for teacher feedback (SHALA_FEATURES_REVIEW.md, SHALA_SHORT_OVERVIEW.md)
 - [x] Project scaffolding (Next.js + all dependencies)
@@ -93,7 +103,7 @@ Key design: all tables use `@@map("snake_case_table_names")`, fields are camelCa
 - [x] Mandala support removed from schema
 
 ### Next Up (Phase 1 — MVP)
-- [ ] Supabase Auth setup (email/password + Google OAuth)
+- [x] Supabase Auth setup (email/password + Google OAuth)
 - [ ] Teacher onboarding wizard (name, slug, city, languages, photo)
 - [ ] Dashboard home page (next upcoming program focused)
 - [ ] Program creation flow (using seeded templates)
