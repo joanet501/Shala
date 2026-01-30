@@ -1,0 +1,586 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// =============================================================================
+// AUTH & TEACHERS
+// =============================================================================
+
+model Teacher {
+  id                      String   @id @default(uuid()) @db.Uuid
+  email                   String   @unique
+  name                    String
+  slug                    String   @unique
+  bio                     String?  @db.Text
+  photoUrl                String?
+  phone                   String?
+  whatsappPhone           String?
+  city                    String?
+  country                 String?
+  languages               String[] @default(["en"])
+
+  // Payment accounts
+  stripeAccountId         String?
+  razorpayAccountId       String?
+
+  // WhatsApp Business
+  whatsappBusinessPhoneId String?
+  whatsappConnected       Boolean  @default(false)
+
+  // Subscription
+  subscriptionTier        SubscriptionTier @default(FREE)
+  customDomain            String?
+
+  // Onboarding
+  onboardingCompleted     Boolean  @default(false)
+
+  // Role
+  role                    UserRole @default(TEACHER)
+
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  // Relations
+  programs                Program[]
+  scheduleTemplates       ScheduleTemplate[]
+  students                Student[]
+  bookings                Booking[]
+  venues                  Venue[]
+  payments                Payment[]
+  notifications           Notification[]
+  mandalaTrackers         MandalaTracker[]
+  subscription            TeacherSubscription?
+
+  @@map("teachers")
+}
+
+enum UserRole {
+  TEACHER
+  ADMIN
+}
+
+enum SubscriptionTier {
+  FREE
+  PRO
+}
+
+// =============================================================================
+// SCHEDULE TEMPLATES
+// =============================================================================
+
+model ScheduleTemplate {
+  id                   String       @id @default(uuid()) @db.Uuid
+  teacherId            String?      @db.Uuid
+  name                 String
+  formatType           FormatType
+  defaultSessions      Json         // Array of { dayOffset, startTime, endTime, label }
+  defaultCapacity      Int?
+  defaultPrice         Decimal?     @db.Decimal(10, 2)
+  defaultCurrency      String?      @default("USD")
+  defaultNotes         String?      @db.Text
+  defaultWhatToBring   String?      @db.Text
+  defaultPreparation   String?      @db.Text
+  isPlatformTemplate   Boolean      @default(false)
+
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+
+  // Relations
+  teacher              Teacher?     @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  programs             Program[]
+
+  @@map("schedule_templates")
+}
+
+enum FormatType {
+  MULTI_DAY
+  SINGLE_DAY
+  HALF_DAY
+  FREE_OFFERING
+  ONLINE_MULTI_DAY
+  ONLINE_SESSION
+  CORRECTION
+  CUSTOM
+}
+
+// =============================================================================
+// PROGRAMS
+// =============================================================================
+
+model Program {
+  id                     String        @id @default(uuid()) @db.Uuid
+  teacherId              String        @db.Uuid
+  templateId             String?       @db.Uuid
+  name                   String
+  nameTranslations       Json?         // { "es": "...", "hi": "..." }
+  slug                   String
+  description            String?       @db.Text
+  descriptionTranslations Json?        // { "es": "...", "hi": "..." }
+  status                 ProgramStatus @default(DRAFT)
+
+  // Venue
+  venueType              VenueType     @default(IN_PERSON)
+  venueId                String?       @db.Uuid
+  venueName              String?
+  venueAddress           String?
+  venueLat               Decimal?      @db.Decimal(10, 7)
+  venueLng               Decimal?      @db.Decimal(10, 7)
+
+  // Online
+  onlineMeetingUrl       String?
+  onlineMeetingProvider  MeetingProvider?
+
+  // Schedule
+  sessions               Json          // Array of { date, startTime, endTime, title }
+
+  // Capacity & pricing
+  capacity               Int?
+  priceAmount            Decimal?      @db.Decimal(10, 2)
+  priceCurrency          String        @default("USD")
+  allowPayAtVenue        Boolean       @default(false)
+  isFree                 Boolean       @default(false)
+
+  // Details
+  notes                  String?       @db.Text
+  notesTranslations      Json?
+  whatToBring            String?       @db.Text
+  whatToBringTranslations Json?
+  preparationInstructions String?      @db.Text
+  preparationTranslations Json?
+  cancellationPolicyText  String?      @db.Text
+
+  // Prerequisites
+  prerequisiteProgramId  String?       @db.Uuid
+  prerequisiteType       PrerequisiteType @default(NONE)
+
+  // Correction session flag
+  isCorrection           Boolean       @default(false)
+  parentProgramId        String?       @db.Uuid
+
+  // Registration
+  registrationDeadline   DateTime?
+
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+
+  // Relations
+  teacher                Teacher       @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  template               ScheduleTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  venue                  Venue?        @relation(fields: [venueId], references: [id], onDelete: SetNull)
+  prerequisiteProgram    Program?      @relation("ProgramPrerequisite", fields: [prerequisiteProgramId], references: [id], onDelete: SetNull)
+  dependentPrograms      Program[]     @relation("ProgramPrerequisite")
+  parentProgram          Program?      @relation("CorrectionParent", fields: [parentProgramId], references: [id], onDelete: SetNull)
+  correctionSessions     Program[]     @relation("CorrectionParent")
+  bookings               Booking[]
+  studentPractices       StudentPractice[]
+  mandalaTrackers        MandalaTracker[]
+
+  @@unique([teacherId, slug])
+  @@map("programs")
+}
+
+enum ProgramStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+  COMPLETED
+}
+
+enum VenueType {
+  IN_PERSON
+  ONLINE
+  HYBRID
+}
+
+enum MeetingProvider {
+  ZOOM
+  GOOGLE_MEET
+  CUSTOM
+}
+
+enum PrerequisiteType {
+  NONE
+  ADVISORY    // Warning but allows registration
+  REQUIRED    // Blocks registration
+}
+
+// =============================================================================
+// VENUES
+// =============================================================================
+
+model Venue {
+  id          String   @id @default(uuid()) @db.Uuid
+  teacherId   String   @db.Uuid
+  name        String
+  address     String
+  city        String
+  country     String
+  lat         Decimal? @db.Decimal(10, 7)
+  lng         Decimal? @db.Decimal(10, 7)
+  capacity    Int?
+  notes       String?  @db.Text
+  isShared    Boolean  @default(false)  // "Share with other teachers" checkbox
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  teacher     Teacher   @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  programs    Program[]
+
+  @@map("venues")
+}
+
+// =============================================================================
+// STUDENTS
+// =============================================================================
+
+model Student {
+  id                    String   @id @default(uuid()) @db.Uuid
+  teacherId             String   @db.Uuid
+  email                 String
+  name                  String
+  phone                 String?
+  whatsappPhone         String?
+  emergencyContactName  String?
+  emergencyContactPhone String?
+  tags                  String[] @default([])
+  teacherNotes          String?  @db.Text
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  teacher               Teacher          @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  bookings              Booking[]
+  healthForms           HealthForm[]
+  studentPractices      StudentPractice[]
+  mandalaTrackers       MandalaTracker[]
+
+  @@unique([teacherId, email])
+  @@map("students")
+}
+
+// =============================================================================
+// BOOKINGS
+// =============================================================================
+
+model Booking {
+  id                    String        @id @default(uuid()) @db.Uuid
+  studentId             String        @db.Uuid
+  programId             String        @db.Uuid
+  teacherId             String        @db.Uuid
+
+  status                BookingStatus @default(PENDING_PAYMENT)
+
+  // Payment
+  paymentMethod         PaymentMethod @default(ONLINE)
+  paymentStatus         PaymentStatus @default(PENDING)
+  paymentAmount         Decimal?      @db.Decimal(10, 2)
+  paymentCurrency       String?
+  paymentGateway        PaymentGateway?
+  paymentGatewayId      String?
+
+  // Completion
+  initiated             Boolean       @default(false)
+  attendanceNotes       String?       @db.Text
+  teacherNotes          String?       @db.Text
+
+  // Cancellation (teacher discretion)
+  cancelledAt           DateTime?
+  cancelledReason       String?       @db.Text
+  refundAmount          Decimal?      @db.Decimal(10, 2)
+  refundNotes           String?       @db.Text
+
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+
+  // Relations
+  student               Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  program               Program       @relation(fields: [programId], references: [id], onDelete: Cascade)
+  teacher               Teacher       @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  healthForm            HealthForm?
+  payment               Payment?
+  studentPractice       StudentPractice?
+  mandalaTracker        MandalaTracker?
+
+  @@map("bookings")
+}
+
+enum BookingStatus {
+  PENDING_PAYMENT
+  CONFIRMED
+  WAITLISTED
+  WAITLIST_OFFERED
+  CANCELLATION_REQUESTED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+}
+
+enum PaymentMethod {
+  ONLINE
+  BANK_TRANSFER
+  CASH
+  FREE
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  REFUNDED
+  WAIVED
+}
+
+enum PaymentGateway {
+  STRIPE
+  RAZORPAY
+  EXTERNAL
+}
+
+// =============================================================================
+// HEALTH FORMS
+// =============================================================================
+
+model HealthForm {
+  id                      String   @id @default(uuid()) @db.Uuid
+  studentId               String   @db.Uuid
+  bookingId               String   @unique @db.Uuid
+
+  age                     Int?
+  height                  String?
+  weight                  String?
+  medicalConditions       String?  @db.Text
+  injuries                Json?    // { back: bool, knee: bool, neck: bool, shoulder: bool, details: string }
+  recentSurgeries         String?  @db.Text
+  isPregnant              Boolean  @default(false)
+  pregnancyMonths         Int?
+  chronicConditions       Json?    // { diabetes: bool, hypertension: bool, heart: bool, epilepsy: bool, other: string }
+  medications             String?  @db.Text
+  previousYogaExperience  String?  @db.Text
+  mentalHealthNotes       String?  @db.Text
+  customResponses         Json?    // Teacher's custom questions/answers
+
+  consentGiven            Boolean  @default(false)
+  consentTimestamp        DateTime?
+
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  // Relations
+  student                 Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  booking                 Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@map("health_forms")
+}
+
+// =============================================================================
+// PRACTICE TRACKING
+// =============================================================================
+
+model StudentPractice {
+  id            String   @id @default(uuid()) @db.Uuid
+  studentId     String   @db.Uuid
+  programId     String   @db.Uuid
+  bookingId     String   @unique @db.Uuid
+  teacherId     String   @db.Uuid
+  practiceName  String   // Denormalized for history display
+  initiatedAt   DateTime @default(now())
+  notes         String?  @db.Text
+
+  // Relations
+  student       Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  program       Program  @relation(fields: [programId], references: [id], onDelete: Cascade)
+  booking       Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@map("student_practices")
+}
+
+// =============================================================================
+// MANDALA (40-DAY PRACTICE TRACKING)
+// =============================================================================
+
+model MandalaTracker {
+  id              String        @id @default(uuid()) @db.Uuid
+  studentId       String        @db.Uuid
+  bookingId       String        @unique @db.Uuid
+  programId       String        @db.Uuid
+  teacherId       String        @db.Uuid
+  practiceName    String
+  startDate       DateTime      @db.Date
+  endDate         DateTime      @db.Date
+  reminderTime    String        @default("06:00") // HH:mm format
+  daysCompleted   Int           @default(0)
+  dailyLog        Json          @default("[]") // [{ day: 1, practiced: true, date: "2026-02-01" }]
+  status          MandalaStatus @default(ACTIVE)
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  student         Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  booking         Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  program         Program       @relation(fields: [programId], references: [id], onDelete: Cascade)
+  teacher         Teacher       @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  @@map("mandala_trackers")
+}
+
+enum MandalaStatus {
+  ACTIVE
+  COMPLETED
+  ABANDONED
+}
+
+// =============================================================================
+// PAYMENTS
+// =============================================================================
+
+model Payment {
+  id                String         @id @default(uuid()) @db.Uuid
+  bookingId         String         @unique @db.Uuid
+  teacherId         String         @db.Uuid
+  amount            Decimal        @db.Decimal(10, 2)
+  currency          String
+  gateway           PaymentGateway
+  gatewayPaymentId  String?
+  gatewayStatus     String?
+  refundAmount      Decimal?       @db.Decimal(10, 2)
+  refundReason      String?        @db.Text
+
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  // Relations
+  booking           Booking        @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  teacher           Teacher        @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+// =============================================================================
+// NOTIFICATIONS
+// =============================================================================
+
+model Notification {
+  id              String             @id @default(uuid()) @db.Uuid
+  recipientType   RecipientType
+  recipientId     String             @db.Uuid
+  channel         NotificationChannel
+  templateKey     String
+  status          NotificationStatus @default(PENDING)
+  sentAt          DateTime?
+  metadata        Json?
+
+  createdAt       DateTime           @default(now())
+
+  // Relations (polymorphic - recipientId can be teacher or student)
+  teacher         Teacher?           @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+enum RecipientType {
+  STUDENT
+  TEACHER
+}
+
+enum NotificationChannel {
+  WHATSAPP
+  EMAIL
+  SMS
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+// =============================================================================
+// TEACHER SUBSCRIPTION
+// =============================================================================
+
+model TeacherSubscription {
+  id                   String             @id @default(uuid()) @db.Uuid
+  teacherId            String             @unique @db.Uuid
+  tier                 SubscriptionTier
+  stripeSubscriptionId String?
+  status               SubscriptionStatus @default(ACTIVE)
+  currentPeriodStart   DateTime?
+  currentPeriodEnd     DateTime?
+
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime            @updatedAt
+
+  // Relations
+  teacher              Teacher            @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  @@map("teacher_subscriptions")
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  PAST_DUE
+}
+
+// =============================================================================
+// COMPLIANCE (Admin-Managed)
+// =============================================================================
+
+model ComplianceRuleset {
+  id                  String           @id @default(uuid()) @db.Uuid
+  version             String
+  name                String
+  status              RulesetStatus    @default(DRAFT)
+  imageRules          Json?
+  textRules           Json?
+  pricingGuidelines   Json?
+  disclaimers         Json?            // Keyed by page_type and language
+
+  publishedAt         DateTime?
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+
+  // Relations
+  assets              ComplianceAsset[]
+
+  @@map("compliance_rulesets")
+}
+
+enum RulesetStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+model ComplianceAsset {
+  id            String    @id @default(uuid()) @db.Uuid
+  rulesetId     String?   @db.Uuid
+  type          AssetType
+  url           String
+  usageContext  String[]  // ["poster", "website_hero", "social", "email"]
+  altText       String?
+  validFrom     DateTime  @db.Date
+  validUntil    DateTime? @db.Date
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  ruleset       ComplianceRuleset? @relation(fields: [rulesetId], references: [id], onDelete: SetNull)
+
+  @@map("compliance_assets")
+}
+
+enum AssetType {
+  IMAGE
+  LOGO
+  ICON
+}
