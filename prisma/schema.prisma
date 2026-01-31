@@ -163,6 +163,7 @@ model Program {
 
   // Registration
   registrationDeadline   DateTime?
+  requiresHealthForm     Boolean       @default(true)
 
   createdAt              DateTime      @default(now())
   updatedAt              DateTime      @updatedAt
@@ -241,10 +242,15 @@ model Student {
   id                    String   @id @default(uuid()) @db.Uuid
   teacherId             String   @db.Uuid
   email                 String
-  name                  String
+  name                  String   @default("") // Deprecated - use firstName + lastName
+  firstName             String
+  lastName              String
+  dateOfBirth           DateTime?
+  gender                Gender?
   phone                 String?
   whatsappPhone         String?
   emergencyContactName  String?
+  emergencyContactRelation String?
   emergencyContactPhone String?
   tags                  String[] @default([])
   teacherNotes          String?  @db.Text
@@ -259,6 +265,12 @@ model Student {
   studentPractices      StudentPractice[]
   @@unique([teacherId, email])
   @@map("students")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
 }
 
 // =============================================================================
@@ -345,20 +357,21 @@ model HealthForm {
   studentId               String   @db.Uuid
   bookingId               String   @unique @db.Uuid
 
-  age                     Int?
-  height                  String?
-  weight                  String?
-  medicalConditions       String?  @db.Text
-  injuries                Json?    // { back: bool, knee: bool, neck: bool, shoulder: bool, details: string }
-  recentSurgeries         String?  @db.Text
-  isPregnant              Boolean  @default(false)
-  pregnancyMonths         Int?
-  chronicConditions       Json?    // { diabetes: bool, hypertension: bool, heart: bool, epilepsy: bool, other: string }
-  medications             String?  @db.Text
-  previousYogaExperience  String?  @db.Text
-  mentalHealthNotes       String?  @db.Text
-  customResponses         Json?    // Teacher's custom questions/answers
+  // General Information
+  howDidYouHear           String?  @db.Text
+  previousYogaPractice    String?  @db.Text
+  hasLearnedIshaYoga      Boolean  @default(false)
+  ishaYogaPractices       String?  @db.Text
 
+  // Health Conditions (stored as array of condition keys)
+  healthConditions        String[] @default([])
+  conditionDetails        String?  @db.Text
+
+  // Specific Health Questions
+  isPregnant              Boolean  @default(false)
+  hadRecentSurgery        Boolean  @default(false)
+
+  // Consent
   consentGiven            Boolean  @default(false)
   consentTimestamp        DateTime?
 

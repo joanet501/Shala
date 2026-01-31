@@ -129,6 +129,16 @@ export async function resetPassword(formData: FormData) {
     return { error: error.message };
   }
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let redirectTo = "/dashboard";
+  if (user) {
+    const { teacher } = await ensureTeacherExists(user);
+    redirectTo = getPostAuthRedirect(teacher);
+  }
+
   revalidatePath("/", "layout");
-  redirect("/dashboard");
+  redirect(redirectTo);
 }

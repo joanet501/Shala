@@ -1,16 +1,35 @@
 import type { Metadata } from "next";
+import { requireAuth } from "@/lib/auth/helpers";
+import { redirect } from "next/navigation";
+import { OnboardingForm } from "./onboarding-form";
 
 export const metadata: Metadata = {
   title: "Get started — Shala",
 };
 
-export default function OnboardingPage() {
+export default async function OnboardingPage() {
+  const { teacher } = await requireAuth();
+
+  if (!teacher) {
+    redirect("/login");
+  }
+
+  if (teacher.onboardingCompleted) {
+    redirect("/dashboard");
+  }
+
   return (
-    <div>
-      <h1 className="text-2xl font-bold">Welcome to Shala</h1>
-      <p className="mt-2 text-muted-foreground">
-        Let&apos;s set up your teaching profile. Onboarding wizard coming soon.
-      </p>
-    </div>
+    <OnboardingForm
+      teacher={{
+        id: teacher.id,
+        name: teacher.name,
+        slug: teacher.slug,
+        city: teacher.city ?? "",
+        country: teacher.country ?? "",
+        languages: teacher.languages,
+        photoUrl: teacher.photoUrl,
+        bio: teacher.bio ?? "",
+      }}
+    />
   );
 }

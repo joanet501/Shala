@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
+import IntlProviderWrapper from "@/components/intl-provider-wrapper";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -28,7 +30,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <Suspense fallback={children}>
+          <IntlProviderWrapper>
+            {children}
+          </IntlProviderWrapper>
+        </Suspense>
         <Toaster />
       </body>
     </html>

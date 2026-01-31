@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/db/prisma";
 import { redirect } from "next/navigation";
-import type { Teacher } from "@/generated/prisma";
+import type { Teacher } from "@/generated/prisma/client";
 import type { User } from "@supabase/supabase-js";
 
 export async function getUser(): Promise<User | null> {

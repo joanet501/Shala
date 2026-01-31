@@ -32,27 +32,42 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
+  const isAuthPage =
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname === "/forgot-password";
+  const isDashboard = pathname.startsWith("/dashboard");
+  const isOnboarding = pathname.startsWith("/onboarding");
+
   // Protected routes: redirect to login if no user
-  if (
-    !user &&
-    (pathname.startsWith("/dashboard") || pathname.startsWith("/onboarding"))
-  ) {
+  if (!user && (isDashboard || isOnboarding)) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("redirectTo", pathname);
     return NextResponse.redirect(url);
   }
 
-  // Auth routes: redirect to dashboard if already authenticated
-  if (
-    user &&
-    (pathname === "/login" ||
-      pathname === "/register" ||
-      pathname === "/forgot-password")
-  ) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
-    return NextResponse.redirect(url);
+  // Authenticated users: check onboarding status for smart redirects
+  if (user && (isAuthPage || isDashboard)) {
+    const { data: teacher } = await supabase
+      .from("teachers")
+      .select("onboardingCompleted")
+      .eq("id", user.id)
+      .single();
+
+    const onboarded = teacher?.onboardingCompleted === true;
+
+    if (isAuthPage) {
+      const url = request.nextUrl.clone();
+      url.pathname = onboarded ? "/dashboard" : "/onboarding";
+      return NextResponse.redirect(url);
+    }
+
+    if (!onboarded) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/onboarding";
+      return NextResponse.redirect(url);
+    }
   }
 
   return supabaseResponse;
