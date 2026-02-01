@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Calendar, Users, Settings, LayoutDashboard } from "lucide-react";
+import { Calendar, Users, Settings, LayoutDashboard, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -20,6 +20,11 @@ const navItems = [
     href: "/dashboard/students",
     label: "Students",
     icon: Users,
+  },
+  {
+    href: "/dashboard/venues",
+    label: "Venues",
+    icon: MapPin,
   },
   {
     href: "/dashboard/settings",

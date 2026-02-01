@@ -287,5 +287,55 @@
       "deleted": "Programa eliminado",
       "templateSaved": "Plantilla guardada"
     }
+  },
+  "venues": {
+    "title": "Sedes",
+    "description": "Gestiona tus sedes",
+    "addVenue": "Nueva Sede",
+    "shared": "Compartida",
+    "cancel": "Cancelar",
+    "columns": {
+      "name": "Nombre",
+      "location": "Ubicacion",
+      "capacity": "Aforo",
+      "programs": "Programas",
+      "shared": "Compartida"
+    },
+    "empty": {
+      "title": "Sin sedes",
+      "description": "Agrega tu primera sede para usarla en tus programas"
+    },
+    "create": {
+      "title": "Nueva Sede",
+      "description": "Agrega una sede para tus programas",
+      "submit": "Crear Sede"
+    },
+    "edit": {
+      "title": "Editar Sede",
+      "description": "Actualiza los datos de la sede",
+      "submit": "Guardar"
+    },
+    "delete": {
+      "title": "Eliminar Sede",
+      "confirm": "Esta accion no se puede deshacer.",
+      "submit": "Eliminar",
+      "hasPrograms": "No se puede eliminar: la sede tiene programas activos"
+    },
+    "fields": {
+      "name": "Nombre",
+      "address": "Direccion",
+      "city": "Ciudad",
+      "country": "Pais",
+      "capacity": "Aforo",
+      "capacityPlaceholder": "Opcional",
+      "notes": "Notas",
+      "notesPlaceholder": "Parking, instrucciones de acceso, etc.",
+      "isShared": "Compartir con otros profes"
+    },
+    "toast": {
+      "created": "Sede creada",
+      "updated": "Sede actualizada",
+      "deleted": "Sede eliminada"
+    }
   }
 }

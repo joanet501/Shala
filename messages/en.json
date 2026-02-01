@@ -287,5 +287,55 @@
       "deleted": "Program deleted",
       "templateSaved": "Template saved successfully"
     }
+  },
+  "venues": {
+    "title": "Venues",
+    "description": "Manage your teaching venues",
+    "addVenue": "Add Venue",
+    "shared": "Shared",
+    "cancel": "Cancel",
+    "columns": {
+      "name": "Name",
+      "location": "Location",
+      "capacity": "Capacity",
+      "programs": "Programs",
+      "shared": "Shared"
+    },
+    "empty": {
+      "title": "No venues yet",
+      "description": "Add your first venue to use when creating programs"
+    },
+    "create": {
+      "title": "New Venue",
+      "description": "Add a venue for your programs",
+      "submit": "Create Venue"
+    },
+    "edit": {
+      "title": "Edit Venue",
+      "description": "Update venue details",
+      "submit": "Save Changes"
+    },
+    "delete": {
+      "title": "Delete Venue",
+      "confirm": "Are you sure? This venue will be permanently deleted.",
+      "submit": "Delete",
+      "hasPrograms": "Cannot delete: venue has active programs"
+    },
+    "fields": {
+      "name": "Venue Name",
+      "address": "Address",
+      "city": "City",
+      "country": "Country",
+      "capacity": "Capacity",
+      "capacityPlaceholder": "Optional",
+      "notes": "Notes",
+      "notesPlaceholder": "Parking, access instructions, etc.",
+      "isShared": "Share with other teachers"
+    },
+    "toast": {
+      "created": "Venue created",
+      "updated": "Venue updated",
+      "deleted": "Venue deleted"
+    }
   }
 }
