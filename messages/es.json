@@ -337,5 +337,18 @@
       "updated": "Sede actualizada",
       "deleted": "Sede eliminada"
     }
+  },
+  "bookingActions": {
+    "approve": "Aprobar",
+    "decline": "Rechazar",
+    "offerSpot": "Ofrecer plaza",
+    "cancelled": "Cancelacion aprobada",
+    "declined": "Cancelacion rechazada",
+    "spotOffered": "Plaza ofrecida al alumno",
+    "paymentUpdated": "Estado de pago actualizado",
+    "paymentPending": "Pendiente",
+    "paymentPaid": "Pagado",
+    "paymentRefunded": "Reembolsado",
+    "paymentWaived": "Exento"
   }
 }

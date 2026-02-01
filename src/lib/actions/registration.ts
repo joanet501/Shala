@@ -31,14 +31,18 @@ export async function createRegistration(data: CompleteRegistrationData) {
       return { error: "This program is not accepting registrations" };
     }
 
-    // 3. Check capacity
+    // 3. Check capacity — waitlist if full
+    let isWaitlisted = false;
     if (program.capacity) {
-      const bookingCount = await prisma.booking.count({
-        where: { programId: program.id },
+      const activeBookingCount = await prisma.booking.count({
+        where: {
+          programId: program.id,
+          status: { notIn: ["CANCELLED", "WAITLISTED"] },
+        },
       });
 
-      if (bookingCount >= program.capacity) {
-        return { error: "This program is full" };
+      if (activeBookingCount >= program.capacity) {
+        isWaitlisted = true;
       }
     }
 
@@ -114,8 +118,9 @@ export async function createRegistration(data: CompleteRegistrationData) {
     // 7. Determine payment details
     const paymentAmount = program.isFree ? null : program.priceAmount;
     const paymentStatus = program.isFree ? "WAIVED" : "PENDING";
-    const bookingStatus =
-      program.isFree || validData.paymentMethod !== "ONLINE"
+    const bookingStatus = isWaitlisted
+      ? "WAITLISTED"
+      : program.isFree || validData.paymentMethod !== "ONLINE"
         ? "CONFIRMED"
         : "PENDING_PAYMENT";
 
@@ -158,12 +163,15 @@ export async function createRegistration(data: CompleteRegistrationData) {
       success: true,
       bookingId: booking.id,
       studentId: student.id,
+      isWaitlisted,
       requiresPayment: bookingStatus === "PENDING_PAYMENT",
-      message: program.isFree
-        ? "Registration successful!"
-        : validData.paymentMethod === "ONLINE"
-          ? "Please complete payment to confirm your booking"
-          : "Registration successful! Please make payment as instructed.",
+      message: isWaitlisted
+        ? "The program is full. You have been added to the waitlist."
+        : program.isFree
+          ? "Registration successful!"
+          : validData.paymentMethod === "ONLINE"
+            ? "Please complete payment to confirm your booking"
+            : "Registration successful! Please make payment as instructed.",
     };
   } catch (error) {
     console.error("Registration error:", error);

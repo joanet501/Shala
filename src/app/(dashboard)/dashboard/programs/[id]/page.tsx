@@ -9,6 +9,7 @@ import { CopyButton } from "@/components/copy-button";
 import { ExternalLink, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { ProgramActions } from "@/components/programs/program-actions";
+import { BookingActions } from "@/components/programs/booking-actions";
 
 export const metadata: Metadata = {
   title: "Program Details — Shala",
@@ -34,7 +35,7 @@ export default async function ProgramPage(props: {
           student: true,
         },
         orderBy: {
-          createdAt: 'desc',
+          createdAt: "desc",
         },
       },
       _count: {
@@ -241,17 +242,30 @@ export default async function ProgramPage(props: {
                       </p>
                     )}
                   </div>
-                  <div className="text-right">
+                  <div className="flex flex-col items-end gap-2">
                     <Badge
                       variant={
                         booking.status === "CONFIRMED"
                           ? "default"
-                          : "secondary"
+                          : booking.status === "CANCELLATION_REQUESTED"
+                            ? "destructive"
+                            : booking.status === "WAITLISTED"
+                              ? "outline"
+                              : "secondary"
                       }
                     >
-                      {booking.status}
+                      {booking.status.replace(/_/g, " ")}
                     </Badge>
-                    <p className="mt-1 text-xs text-muted-foreground">
+                    <BookingActions
+                      teacherId={teacher.id}
+                      booking={{
+                        id: booking.id,
+                        status: booking.status,
+                        paymentStatus: booking.paymentStatus,
+                        cancelledReason: booking.cancelledReason,
+                      }}
+                    />
+                    <p className="text-xs text-muted-foreground">
                       {new Date(booking.createdAt).toLocaleDateString()}
                     </p>
                   </div>

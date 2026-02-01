@@ -337,5 +337,18 @@
       "updated": "Venue updated",
       "deleted": "Venue deleted"
     }
+  },
+  "bookingActions": {
+    "approve": "Approve",
+    "decline": "Decline",
+    "offerSpot": "Offer Spot",
+    "cancelled": "Cancellation approved",
+    "declined": "Cancellation declined",
+    "spotOffered": "Spot offered to student",
+    "paymentUpdated": "Payment status updated",
+    "paymentPending": "Pending",
+    "paymentPaid": "Paid",
+    "paymentRefunded": "Refunded",
+    "paymentWaived": "Waived"
   }
 }
