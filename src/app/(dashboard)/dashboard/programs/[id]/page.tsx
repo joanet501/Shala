@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { requireAuth } from "@/lib/auth/helpers";
 import { redirect, notFound } from "next/navigation";
 import { prisma } from "@/lib/db/prisma";
+import { getTranslations } from "next-intl/server";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,8 @@ export default async function ProgramPage(props: {
     redirect("/onboarding");
   }
 
+  const t = await getTranslations("programDetail");
+
   const program = await prisma.program.findUnique({
     where: { id: params.id },
     include: {
@@ -44,15 +47,10 @@ export default async function ProgramPage(props: {
     },
   });
 
-  if (!program) {
-    notFound();
-  }
+  if (!program) notFound();
+  if (program.teacherId !== teacher.id) notFound();
 
-  if (program.teacherId !== teacher.id) {
-    notFound();
-  }
-
-  const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/t/${teacher.slug}/register/${program.slug}`;
+  const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/t/${teacher.slug}/register/${program.slug}`;
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 py-6">
@@ -61,7 +59,7 @@ export default async function ProgramPage(props: {
           <Link href="/dashboard/programs">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="mr-2 size-4" />
-              Back
+              {t("back")}
             </Button>
           </Link>
           <div>
@@ -74,7 +72,6 @@ export default async function ProgramPage(props: {
         </Badge>
       </div>
 
-      {/* Program Actions */}
       <ProgramActions
         teacherId={teacher.id}
         programId={program.id}
@@ -88,23 +85,15 @@ export default async function ProgramPage(props: {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between gap-4">
               <div className="flex-1">
-                <p className="text-sm font-medium">Public Registration Link</p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Share this link with students to register
-                </p>
-                <code className="mt-2 block rounded bg-muted px-2 py-1 text-xs">
-                  {publicUrl}
-                </code>
+                <p className="text-sm font-medium">{t("publicLink")}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{t("publicLinkDesc")}</p>
+                <code className="mt-2 block rounded bg-muted px-2 py-1 text-xs">{publicUrl}</code>
               </div>
               <div className="flex items-center gap-2">
                 <Button variant="outline" size="sm" asChild>
-                  <a
-                    href={publicUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <a href={publicUrl} target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="mr-2 size-4" />
-                    View
+                    {t("view")}
                   </a>
                 </Button>
                 <CopyButton text={publicUrl} variant="default" showText />
@@ -116,142 +105,72 @@ export default async function ProgramPage(props: {
 
       <Card>
         <CardHeader>
-          <CardTitle>Program Details</CardTitle>
+          <CardTitle>{t("details")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {program.description && (
-            <div>
-              <p className="text-sm font-medium">Description</p>
-              <p className="text-sm text-muted-foreground">
-                {program.description}
-              </p>
-            </div>
+            <DetailRow label={t("description")} value={program.description} />
           )}
-
-          <div>
-            <p className="text-sm font-medium">Venue Type</p>
-            <p className="text-sm text-muted-foreground">{program.venueType}</p>
-          </div>
-
+          <DetailRow label={t("venueType")} value={program.venueType} />
           {program.venue && (
-            <div>
-              <p className="text-sm font-medium">Venue</p>
-              <p className="text-sm text-muted-foreground">
-                {program.venue.name}, {program.venue.city}, {program.venue.country}
-              </p>
-            </div>
+            <DetailRow label={t("venue")} value={`${program.venue.name}, ${program.venue.city}, ${program.venue.country}`} />
           )}
-
           {program.onlineMeetingUrl && (
-            <div>
-              <p className="text-sm font-medium">Meeting URL</p>
-              <p className="text-sm text-muted-foreground">
-                {program.onlineMeetingUrl}
-              </p>
-            </div>
+            <DetailRow label={t("meetingUrl")} value={program.onlineMeetingUrl} />
           )}
 
           <div>
-            <p className="text-sm font-medium">Sessions</p>
+            <p className="text-sm font-medium">{t("sessions")}</p>
             <div className="mt-2 space-y-2">
-              {(program.sessions as any[]).map((session, i) => (
+              {(program.sessions as Array<{ date: string; startTime: string; endTime: string; title: string }>).map((session, i) => (
                 <div key={i} className="rounded border p-2 text-sm">
                   <div className="font-medium">{session.title}</div>
                   <div className="text-muted-foreground">
-                    {new Date(session.date).toLocaleDateString()} —{" "}
-                    {session.startTime} to {session.endTime}
+                    {new Date(session.date).toLocaleDateString()} — {session.startTime} to {session.endTime}
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div>
-            <p className="text-sm font-medium">Pricing</p>
-            <p className="text-sm text-muted-foreground">
-              {program.isFree
-                ? "Free"
-                : `${program.priceAmount?.toString()} ${program.priceCurrency}`}
-            </p>
-          </div>
-
-          {program.capacity && (
-            <div>
-              <p className="text-sm font-medium">Capacity</p>
-              <p className="text-sm text-muted-foreground">{program.capacity}</p>
-            </div>
-          )}
-
-          {program.notes && (
-            <div>
-              <p className="text-sm font-medium">Notes</p>
-              <p className="text-sm text-muted-foreground">{program.notes}</p>
-            </div>
-          )}
-
-          {program.whatToBring && (
-            <div>
-              <p className="text-sm font-medium">What to Bring</p>
-              <p className="text-sm text-muted-foreground">
-                {program.whatToBring}
-              </p>
-            </div>
-          )}
-
-          {program.preparationInstructions && (
-            <div>
-              <p className="text-sm font-medium">Preparation Instructions</p>
-              <p className="text-sm text-muted-foreground">
-                {program.preparationInstructions}
-              </p>
-            </div>
-          )}
+          <DetailRow
+            label={t("pricing")}
+            value={program.isFree ? t("free") : `${program.priceAmount?.toString()} ${program.priceCurrency}`}
+          />
+          {program.capacity && <DetailRow label={t("capacity")} value={program.capacity.toString()} />}
+          {program.notes && <DetailRow label={t("notes")} value={program.notes} />}
+          {program.whatToBring && <DetailRow label={t("whatToBring")} value={program.whatToBring} />}
+          {program.preparationInstructions && <DetailRow label={t("preparation")} value={program.preparationInstructions} />}
         </CardContent>
       </Card>
 
-      {/* Bookings Section */}
       <Card>
         <CardHeader>
           <CardTitle>
-            Registrations ({program._count.bookings}
+            {t("registrations")} ({program._count.bookings}
             {program.capacity ? `/${program.capacity}` : ""})
           </CardTitle>
         </CardHeader>
         <CardContent>
           {program.bookings.length === 0 ? (
             <div className="py-8 text-center text-sm text-muted-foreground">
-              No registrations yet
+              {t("noRegistrations")}
             </div>
           ) : (
             <div className="space-y-2">
               {program.bookings.map((booking) => (
-                <div
-                  key={booking.id}
-                  className="flex items-center justify-between rounded-lg border p-3"
-                >
+                <div key={booking.id} className="flex items-center justify-between rounded-lg border p-3">
                   <div className="flex-1">
-                    <p className="font-medium">
-                      {booking.student.firstName} {booking.student.lastName}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {booking.student.email}
-                    </p>
-                    {booking.student.phone && (
-                      <p className="text-sm text-muted-foreground">
-                        {booking.student.phone}
-                      </p>
-                    )}
+                    <p className="font-medium">{booking.student.firstName} {booking.student.lastName}</p>
+                    <p className="text-sm text-muted-foreground">{booking.student.email}</p>
                   </div>
                   <div className="flex flex-col items-end gap-2">
                     <Badge
                       variant={
-                        booking.status === "CONFIRMED"
-                          ? "default"
-                          : booking.status === "CANCELLATION_REQUESTED"
-                            ? "destructive"
-                            : booking.status === "WAITLISTED"
-                              ? "outline"
-                              : "secondary"
+                        booking.status === "CONFIRMED" ? "default"
+                          : booking.status === "CANCELLATION_REQUESTED" ? "destructive"
+                          : booking.status === "WAITLISTED" ? "outline"
+                          : "secondary"
                       }
                     >
                       {booking.status.replace(/_/g, " ")}
@@ -275,6 +194,15 @@ export default async function ProgramPage(props: {
           )}
         </CardContent>
       </Card>
+    </div>
+  );
+}
+
+function DetailRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <p className="text-sm font-medium">{label}</p>
+      <p className="text-sm text-muted-foreground">{value}</p>
     </div>
   );
 }

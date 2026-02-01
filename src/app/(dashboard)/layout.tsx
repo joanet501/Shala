@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import Link from "next/link";
 import { Navigation } from "@/components/navigation";
+import { LanguageSwitcher } from "@/components/language-switcher";
 
 export default async function DashboardLayout({
   children,
@@ -30,6 +31,7 @@ export default async function DashboardLayout({
             <Navigation />
           </div>
           <div className="flex items-center gap-4">
+            <LanguageSwitcher />
             <span className="text-sm text-muted-foreground">
               {displayName}
             </span>

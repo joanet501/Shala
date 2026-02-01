@@ -350,5 +350,91 @@
     "paymentPaid": "Pagado",
     "paymentRefunded": "Reembolsado",
     "paymentWaived": "Exento"
+  },
+  "programDetail": {
+    "back": "Volver",
+    "publicLink": "Enlace de inscripcion",
+    "publicLinkDesc": "Comparte este enlace con tus alumnos",
+    "view": "Ver",
+    "details": "Detalles del programa",
+    "description": "Descripcion",
+    "venueType": "Tipo de sede",
+    "venue": "Sede",
+    "meetingUrl": "Enlace de reunion",
+    "sessions": "Sesiones",
+    "pricing": "Precio",
+    "free": "Gratis",
+    "capacity": "Aforo",
+    "notes": "Notas",
+    "whatToBring": "Que traer",
+    "preparation": "Instrucciones de preparacion",
+    "registrations": "Inscripciones",
+    "noRegistrations": "Sin inscripciones",
+    "published": "Publicado"
+  },
+  "programList": {
+    "title": "Programas",
+    "description": "Gestiona tus programas",
+    "newProgram": "Nuevo Programa",
+    "empty": "Sin programas",
+    "createFirst": "Crea tu primer programa",
+    "status": "Estado",
+    "name": "Nombre",
+    "date": "Fecha",
+    "bookings": "Reservas",
+    "free": "Gratis"
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar Sesion",
+      "email": "Email",
+      "password": "Contrasena",
+      "submit": "Iniciar Sesion",
+      "noAccount": "Sin cuenta?",
+      "register": "Registrate",
+      "forgotPassword": "Olvidaste la contrasena?"
+    },
+    "register": {
+      "title": "Crear Cuenta",
+      "email": "Email",
+      "password": "Contrasena",
+      "confirmPassword": "Confirmar Contrasena",
+      "submit": "Crear Cuenta",
+      "hasAccount": "Ya tienes cuenta?",
+      "login": "Inicia sesion"
+    },
+    "forgotPassword": {
+      "title": "Recuperar Contrasena",
+      "email": "Email",
+      "submit": "Enviar enlace",
+      "back": "Volver al login",
+      "sent": "Revisa tu email"
+    },
+    "resetPassword": {
+      "title": "Nueva Contrasena",
+      "password": "Nueva Contrasena",
+      "confirmPassword": "Confirmar Contrasena",
+      "submit": "Cambiar Contrasena"
+    }
+  },
+  "settings": {
+    "title": "Ajustes",
+    "description": "Gestiona tu cuenta",
+    "comingSoon": "Ajustes proximamente"
+  },
+  "onboarding": {
+    "title": "Configura tu perfil",
+    "subtitle": "Completa tu perfil para empezar a ensenar",
+    "name": "Nombre completo",
+    "slug": "URL de perfil",
+    "slugAvailable": "Disponible!",
+    "slugTaken": "Ya existe",
+    "city": "Ciudad",
+    "country": "Pais",
+    "languages": "Idiomas",
+    "bio": "Bio",
+    "photo": "Foto",
+    "submit": "Completar",
+    "checking": "Comprobando..."
   }
 }

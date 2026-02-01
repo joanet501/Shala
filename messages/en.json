@@ -350,5 +350,91 @@
     "paymentPaid": "Paid",
     "paymentRefunded": "Refunded",
     "paymentWaived": "Waived"
+  },
+  "programDetail": {
+    "back": "Back",
+    "publicLink": "Public Registration Link",
+    "publicLinkDesc": "Share this link with students to register",
+    "view": "View",
+    "details": "Program Details",
+    "description": "Description",
+    "venueType": "Venue Type",
+    "venue": "Venue",
+    "meetingUrl": "Meeting URL",
+    "sessions": "Sessions",
+    "pricing": "Pricing",
+    "free": "Free",
+    "capacity": "Capacity",
+    "notes": "Notes",
+    "whatToBring": "What to Bring",
+    "preparation": "Preparation Instructions",
+    "registrations": "Registrations",
+    "noRegistrations": "No registrations yet",
+    "published": "Published"
+  },
+  "programList": {
+    "title": "Programs",
+    "description": "Manage your programs",
+    "newProgram": "New Program",
+    "empty": "No programs yet",
+    "createFirst": "Create your first program",
+    "status": "Status",
+    "name": "Name",
+    "date": "Date",
+    "bookings": "Bookings",
+    "free": "Free"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign In",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign In",
+      "noAccount": "No account?",
+      "register": "Sign up",
+      "forgotPassword": "Forgot password?"
+    },
+    "register": {
+      "title": "Create Account",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "submit": "Create Account",
+      "hasAccount": "Already have an account?",
+      "login": "Sign in"
+    },
+    "forgotPassword": {
+      "title": "Reset Password",
+      "email": "Email",
+      "submit": "Send Reset Link",
+      "back": "Back to login",
+      "sent": "Check your email for a reset link"
+    },
+    "resetPassword": {
+      "title": "New Password",
+      "password": "New Password",
+      "confirmPassword": "Confirm Password",
+      "submit": "Reset Password"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your account settings",
+    "comingSoon": "Settings coming soon"
+  },
+  "onboarding": {
+    "title": "Set up your profile",
+    "subtitle": "Complete your profile to start teaching",
+    "name": "Full Name",
+    "slug": "Profile URL",
+    "slugAvailable": "Available!",
+    "slugTaken": "Already taken",
+    "city": "City",
+    "country": "Country",
+    "languages": "Languages",
+    "bio": "Bio",
+    "photo": "Photo",
+    "submit": "Complete Setup",
+    "checking": "Checking..."
   }
 }
