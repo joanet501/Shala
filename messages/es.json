@@ -257,5 +257,35 @@
       "description": "Crea y publica un programa para empezar a recibir inscripciones",
       "cta": "Crea tu primer programa"
     }
+  },
+  "programs": {
+    "actions": {
+      "publish": "Publicar",
+      "complete": "Marcar completado",
+      "duplicate": "Duplicar",
+      "saveTemplate": "Guardar plantilla",
+      "saveTemplateTitle": "Guardar como plantilla",
+      "saveTemplateDescription": "Guarda la configuracion de este programa como plantilla reutilizable",
+      "templateName": "Nombre de la plantilla",
+      "save": "Guardar",
+      "cancel": "Cancelar programa",
+      "cancelTitle": "Cancelar programa",
+      "cancelConfirm": "Seguro que quieres cancelar este programa?",
+      "cancelWithBookings": "Este programa tiene reservas. Cancelarlo afectara a los alumnos inscritos.",
+      "back": "Volver",
+      "confirmCancel": "Si, cancelar",
+      "delete": "Eliminar",
+      "deleteTitle": "Eliminar programa",
+      "deleteConfirm": "Esta accion no se puede deshacer. El programa sera eliminado permanentemente.",
+      "confirmDelete": "Si, eliminar"
+    },
+    "toast": {
+      "published": "Programa publicado",
+      "completed": "Programa completado",
+      "cancelled": "Programa cancelado",
+      "duplicated": "Programa duplicado",
+      "deleted": "Programa eliminado",
+      "templateSaved": "Plantilla guardada"
+    }
   }
 }

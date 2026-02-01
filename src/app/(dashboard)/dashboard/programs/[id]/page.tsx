@@ -6,7 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CopyButton } from "@/components/copy-button";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, ArrowLeft } from "lucide-react";
+import Link from "next/link";
+import { ProgramActions } from "@/components/programs/program-actions";
 
 export const metadata: Metadata = {
   title: "Program Details — Shala",
@@ -54,14 +56,31 @@ export default async function ProgramPage(props: {
   return (
     <div className="mx-auto max-w-4xl space-y-6 py-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">{program.name}</h1>
-          <p className="text-muted-foreground">/{program.slug}</p>
+        <div className="flex items-center gap-4">
+          <Link href="/dashboard/programs">
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="mr-2 size-4" />
+              Back
+            </Button>
+          </Link>
+          <div>
+            <h1 className="text-3xl font-bold">{program.name}</h1>
+            <p className="text-muted-foreground">/{program.slug}</p>
+          </div>
         </div>
         <Badge variant={program.status === "PUBLISHED" ? "default" : "secondary"}>
           {program.status}
         </Badge>
       </div>
+
+      {/* Program Actions */}
+      <ProgramActions
+        teacherId={teacher.id}
+        programId={program.id}
+        status={program.status}
+        programName={program.name}
+        hasBookings={program._count.bookings > 0}
+      />
 
       {program.status === "PUBLISHED" && (
         <Card className="border-primary/50 bg-primary/5">

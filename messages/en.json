@@ -257,5 +257,35 @@
       "description": "Create and publish a program to start accepting registrations",
       "cta": "Create your first program"
     }
+  },
+  "programs": {
+    "actions": {
+      "publish": "Publish",
+      "complete": "Mark Complete",
+      "duplicate": "Duplicate",
+      "saveTemplate": "Save as Template",
+      "saveTemplateTitle": "Save as Template",
+      "saveTemplateDescription": "Save this program configuration as a reusable template",
+      "templateName": "Template name",
+      "save": "Save",
+      "cancel": "Cancel Program",
+      "cancelTitle": "Cancel Program",
+      "cancelConfirm": "Are you sure you want to cancel this program?",
+      "cancelWithBookings": "This program has bookings. Cancelling will affect registered students.",
+      "back": "Go Back",
+      "confirmCancel": "Yes, Cancel",
+      "delete": "Delete",
+      "deleteTitle": "Delete Program",
+      "deleteConfirm": "This action cannot be undone. The program will be permanently deleted.",
+      "confirmDelete": "Yes, Delete"
+    },
+    "toast": {
+      "published": "Program published successfully",
+      "completed": "Program marked as completed",
+      "cancelled": "Program cancelled",
+      "duplicated": "Program duplicated",
+      "deleted": "Program deleted",
+      "templateSaved": "Template saved successfully"
+    }
   }
 }
