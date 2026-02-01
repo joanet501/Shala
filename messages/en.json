@@ -218,5 +218,44 @@
     "contactTeacher": "Contact Teacher",
     "contactQuestion": "If you have any questions, contact {teacherName}",
     "backToTeacher": "Back to teacher page"
+  },
+  "dashboard": {
+    "welcome": "Welcome back, {name}",
+    "overview": "An overview of your teaching practice",
+    "viewPublicPage": "View Public Page",
+    "stats": {
+      "programs": "Programs",
+      "students": "Students",
+      "completed": "Completed",
+      "upcoming": "Upcoming",
+      "published": "published",
+      "draft": "drafts"
+    },
+    "nextProgram": {
+      "label": "Next Upcoming Program",
+      "manage": "Manage",
+      "online": "Online",
+      "registered": "Registered",
+      "pendingPayments": "Pending payments",
+      "healthForms": "Health forms pending",
+      "cancellations": "Cancellation requests",
+      "spotsLeft": "{count} spots left"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "newProgram": "New Program",
+      "viewStudents": "View Students",
+      "allPrograms": "All Programs",
+      "publicPage": "Public Page"
+    },
+    "recentActivity": {
+      "title": "Recent Activity",
+      "empty": "No bookings yet"
+    },
+    "empty": {
+      "title": "No programs yet",
+      "description": "Create and publish a program to start accepting registrations",
+      "cta": "Create your first program"
+    }
   }
 }

@@ -218,5 +218,44 @@
     "contactTeacher": "Contacta al profesor",
     "contactQuestion": "Si tienes alguna pregunta, contacta con {teacherName}",
     "backToTeacher": "Volver a la página del profesor"
+  },
+  "dashboard": {
+    "welcome": "Bienvenido, {name}",
+    "overview": "Un resumen de tu actividad como profesor",
+    "viewPublicPage": "Ver perfil",
+    "stats": {
+      "programs": "Programas",
+      "students": "Alumnos",
+      "completed": "Completados",
+      "upcoming": "Activos",
+      "published": "publicados",
+      "draft": "borradores"
+    },
+    "nextProgram": {
+      "label": "Tu programa activo",
+      "manage": "Gestionar",
+      "online": "Online",
+      "registered": "Registrados",
+      "pendingPayments": "Pagos pendientes",
+      "healthForms": "Formularios pendientes",
+      "cancellations": "Cancelaciones",
+      "spotsLeft": "{count} plazas libres"
+    },
+    "quickActions": {
+      "title": "Acciones",
+      "newProgram": "Nuevo Programa",
+      "viewStudents": "Ver Alumnos",
+      "allPrograms": "Todos los Programas",
+      "publicPage": "Perfil"
+    },
+    "recentActivity": {
+      "title": "Actividad Reciente",
+      "empty": "Sin reservas todavia"
+    },
+    "empty": {
+      "title": "Sin programas",
+      "description": "Crea y publica un programa para empezar a recibir inscripciones",
+      "cta": "Crea tu primer programa"
+    }
   }
 }
