@@ -436,5 +436,72 @@
     "photo": "Foto",
     "submit": "Completar",
     "checking": "Comprobando..."
+  },
+  "healthForms": {
+    "title": "Revision de Cuestionarios de Salud",
+    "subtitle": "Revisar cuestionarios de salud para",
+    "listTitle": "Cuestionarios de Salud Enviados",
+    "noHealthForms": "No hay cuestionarios de salud enviados aun.",
+    "stats": {
+      "total": "Total",
+      "reviewed": "Revisados",
+      "pending": "Pendientes",
+      "flagged": "Con Alertas"
+    },
+    "status": {
+      "reviewed": "Revisado",
+      "pendingReview": "Pendiente de revision"
+    },
+    "flags": {
+      "pregnant": "Embarazada",
+      "recentSurgery": "Cirugia reciente",
+      "healthConditions": "{count} Condiciones de salud"
+    },
+    "actions": {
+      "view": "Ver detalles",
+      "markReviewed": "Marcar como revisado",
+      "marking": "Marcando...",
+      "close": "Cerrar"
+    },
+    "submittedOn": "Enviado el {date}",
+    "detail": {
+      "title": "Detalles del cuestionario",
+      "healthFlags": "Alertas de salud",
+      "pregnancy": "Embarazo",
+      "recentSurgery": "Cirugia reciente (ultimos 6 meses)",
+      "healthConditions": "Condiciones de salud",
+      "noConditions": "No se reportaron condiciones de salud",
+      "conditionDetails": "Detalles de las condiciones",
+      "yogaBackground": "Experiencia en yoga",
+      "howDidYouHear": "Como conociste este programa?",
+      "previousPractice": "Practica previa de yoga/meditacion",
+      "hasLearnedIsha": "Ha aprendido practicas de Isha Yoga",
+      "ishaPractices": "Practicas de Isha aprendidas",
+      "consent": "Consentimiento y responsabilidad",
+      "consentGiven": "Consentimiento otorgado y responsabilidad aceptada",
+      "consentNotGiven": "Consentimiento no otorgado",
+      "submissionInfo": "Informacion del envio",
+      "submittedOn": "Enviado el {date}",
+      "reviewedOn": "Revisado el {date}",
+      "notProvided": "No proporcionado"
+    },
+    "conditions": {
+      "heartDisease": "Enfermedad cardiaca",
+      "highBloodPressure": "Presion arterial alta",
+      "diabetes": "Diabetes",
+      "asthma": "Asma",
+      "backProblems": "Problemas de espalda",
+      "neckProblems": "Problemas de cuello",
+      "kneeProblems": "Problemas de rodillas",
+      "shoulderProblems": "Problemas de hombros",
+      "anxiety": "Ansiedad",
+      "depression": "Depresion",
+      "eatingDisorder": "Trastorno alimentario",
+      "other": "Otro"
+    },
+    "common": {
+      "yes": "Si",
+      "no": "No"
+    }
   }
 }

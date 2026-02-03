@@ -436,5 +436,72 @@
     "photo": "Photo",
     "submit": "Complete Setup",
     "checking": "Checking..."
+  },
+  "healthForms": {
+    "title": "Health Forms Review",
+    "subtitle": "Review submitted health forms for",
+    "listTitle": "Health Form Submissions",
+    "noHealthForms": "No health forms submitted yet.",
+    "stats": {
+      "total": "Total Forms",
+      "reviewed": "Reviewed",
+      "pending": "Pending Review",
+      "flagged": "Health Flags"
+    },
+    "status": {
+      "reviewed": "Reviewed",
+      "pendingReview": "Pending Review"
+    },
+    "flags": {
+      "pregnant": "Pregnant",
+      "recentSurgery": "Recent Surgery",
+      "healthConditions": "{count} Health Conditions"
+    },
+    "actions": {
+      "view": "View Details",
+      "markReviewed": "Mark as Reviewed",
+      "marking": "Marking...",
+      "close": "Close"
+    },
+    "submittedOn": "Submitted on {date}",
+    "detail": {
+      "title": "Health Form Details",
+      "healthFlags": "Health Flags",
+      "pregnancy": "Pregnancy",
+      "recentSurgery": "Recent Surgery (last 6 months)",
+      "healthConditions": "Health Conditions",
+      "noConditions": "No health conditions reported",
+      "conditionDetails": "Condition Details",
+      "yogaBackground": "Yoga Background",
+      "howDidYouHear": "How did you hear about this program?",
+      "previousPractice": "Previous yoga/meditation practice",
+      "hasLearnedIsha": "Has learned Isha Yoga practices",
+      "ishaPractices": "Isha practices learned",
+      "consent": "Consent & Liability",
+      "consentGiven": "Consent given and liability accepted",
+      "consentNotGiven": "Consent not given",
+      "submissionInfo": "Submission Information",
+      "submittedOn": "Submitted on {date}",
+      "reviewedOn": "Reviewed on {date}",
+      "notProvided": "Not provided"
+    },
+    "conditions": {
+      "heartDisease": "Heart Disease",
+      "highBloodPressure": "High Blood Pressure",
+      "diabetes": "Diabetes",
+      "asthma": "Asthma",
+      "backProblems": "Back Problems",
+      "neckProblems": "Neck Problems",
+      "kneeProblems": "Knee Problems",
+      "shoulderProblems": "Shoulder Problems",
+      "anxiety": "Anxiety",
+      "depression": "Depression",
+      "eatingDisorder": "Eating Disorder",
+      "other": "Other"
+    },
+    "common": {
+      "yes": "Yes",
+      "no": "No"
+    }
   }
 }

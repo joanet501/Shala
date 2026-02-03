@@ -371,6 +371,11 @@ model HealthForm {
   isPregnant              Boolean  @default(false)
   hadRecentSurgery        Boolean  @default(false)
 
+  // Teacher Review
+  isReviewed              Boolean  @default(false)
+  reviewedAt              DateTime?
+  reviewedBy              String?  @db.Uuid  // Teacher who reviewed it
+
   // Consent
   consentGiven            Boolean  @default(false)
   consentTimestamp        DateTime?
